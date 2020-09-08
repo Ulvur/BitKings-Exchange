@@ -549,17 +549,17 @@ limit | INT | NO | Default 100; max 5000. Valid limits:[5, 10, 20, 50, 100, 500,
 **Response:**
 ```javascript
 {
-  "lastUpdateId": 1027024,
+  "lastUpdateId": 1,
   "bids": [
     [
-      "4.00000000",     // PRICE
-      "431.00000000"    // QTY
+      "0.000274",     // PRICE
+      "15000"         // QTY
     ]
   ],
   "asks": [
     [
-      "4.00000200",
-      "12.00000000"
+      "0.000274",
+      "15000"
     ]
   ]
 }
@@ -586,13 +586,11 @@ limit | INT | NO | Default 500; max 1000.
 ```javascript
 [
   {
-    "id": 28457,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "quoteQty": "48.000012",
-    "time": 1499865549590,
-    "isBuyerMaker": true,
-    "isBestMatch": true
+    "id": 12,
+    "price": 0.00029,
+    "qty": 5000,
+    "time": 1599476027866,
+    "isBuyerMaker": true
   }
 ]
 ```
