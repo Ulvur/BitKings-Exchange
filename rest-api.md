@@ -1,6 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+*BitKings Exchange API has been elaborated using Binance API documentation as the main source of reference (https://github.com/binance-exchange/binance-official-api-docs)*
 
   - [General API Information](#general-api-information)
   - [HTTP Return Codes](#http-return-codes)
