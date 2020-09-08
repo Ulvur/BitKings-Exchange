@@ -549,17 +549,17 @@ limit | INT | NO | Default 100; max 5000. Valid limits:[5, 10, 20, 50, 100, 500,
 **Response:**
 ```javascript
 {
-  "lastUpdateId": 1,
-  "bids": [
+  lastUpdateId: 1,
+  bids: [
     [
-      "0.000274",     // PRICE
-      "15000"         // QTY
+      0.000274,     // PRICE
+      15000         // QTY
     ]
   ],
-  "asks": [
+  asks: [
     [
-      "0.000274",
-      "15000"
+      0.000274,
+      5000
     ]
   ]
 }
@@ -586,11 +586,11 @@ limit | INT | NO | Default 500; max 1000.
 ```javascript
 [
   {
-    "id": 12,
-    "price": 0.00029,
-    "qty": 5000,
-    "time": 1599476027866,
-    "isBuyerMaker": true
+    id: 12,
+    price: 0.00029,
+    qty: 5000,
+    time: 1599476027866,
+    isBuyerMaker: true
   }
 ]
 ```
@@ -616,13 +616,11 @@ fromId | LONG | NO | TradeId to fetch from. Default gets most recent trades.
 ```javascript
 [
   {
-    "id": 28457,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "quoteQty": "48.000012",
-    "time": 1499865549590,
-    "isBuyerMaker": true,
-    "isBestMatch": true
+    id: 12,
+    price: 0.00029,
+    qty: 5000,
+    time: 1599476027866,
+    isBuyerMaker: true
   }
 ]
 ```
@@ -726,8 +724,8 @@ symbol | STRING | YES |
 **Response:**
 ```javascript
 {
-  "mins": 5,
-  "price": "9.35751834"
+  mins: 5,
+  price: 0.0003
 }
 ```
 
@@ -752,52 +750,11 @@ symbol | STRING | NO |
 **Response:**
 ```javascript
 {
-  "symbol": "BTKUSDT",
-  "priceChange": "-94.99999800",
-  "priceChangePercent": "-95.960",
-  "weightedAvgPrice": "0.29628482",
-  "prevClosePrice": "0.10002000",
-  "lastPrice": "4.00000200",
-  "lastQty": "200.00000000",
-  "bidPrice": "4.00000000",
-  "askPrice": "4.00000200",
-  "openPrice": "99.00000000",
-  "highPrice": "100.00000000",
-  "lowPrice": "0.10000000",
-  "volume": "8913.30000000",
-  "quoteVolume": "15.30000000",
-  "openTime": 1499783499040,
-  "closeTime": 1499869899040,
-  "firstId": 28385,   // First tradeId
-  "lastId": 28460,    // Last tradeId
-  "count": 76         // Trade count
+  symbol: 'USDTBTK',
+  lastPrice: 0.0003,
+  bidPrice: 0.000299,
+  askPrice: 0.0003
 }
-```
-OR
-```javascript
-[
-  {
-    "symbol": "BTKUSDT",
-    "priceChange": "-94.99999800",
-    "priceChangePercent": "-95.960",
-    "weightedAvgPrice": "0.29628482",
-    "prevClosePrice": "0.10002000",
-    "lastPrice": "4.00000200",
-    "lastQty": "200.00000000",
-    "bidPrice": "4.00000000",
-    "askPrice": "4.00000200",
-    "openPrice": "99.00000000",
-    "highPrice": "100.00000000",
-    "lowPrice": "0.10000000",
-    "volume": "8913.30000000",
-    "quoteVolume": "15.30000000",
-    "openTime": 1499783499040,
-    "closeTime": 1499869899040,
-    "firstId": 28385,   // First tradeId
-    "lastId": 28460,    // Last tradeId
-    "count": 76         // Trade count
-  }
-]
 ```
 
 
@@ -821,23 +778,11 @@ symbol | STRING | NO |
 **Response:**
 ```javascript
 {
-  "symbol": "BTKUSDT",
-  "price": "4.00000200"
+  symbol: 'USDTBTK',
+  price: 0.0003
 }
 ```
-OR
-```javascript
-[
-  {
-    "symbol": "ETHUSDT",
-    "price": "4.00000200"
-  },
-  {
-    "symbol": "XAMPUSDT",
-    "price": "0.07946600"
-  }
-]
-```
+
 
 ### Symbol order book ticker
 ```
@@ -859,32 +804,14 @@ symbol | STRING | NO |
 **Response:**
 ```javascript
 {
-  "symbol": "BTKUSDT",
-  "bidPrice": "4.00000000",
-  "bidQty": "431.00000000",
-  "askPrice": "4.00000200",
-  "askQty": "9.00000000"
+    symbol: 'BTKUSDT',
+    bidPrice: 0.000299,
+    bidQty: 15000,
+    askPrice: 0.0003,
+    askQty: 15000
 }
 ```
-OR
-```javascript
-[
-  {
-    "symbol": "BTKUSDT",
-    "bidPrice": "4.00000000",
-    "bidQty": "431.00000000",
-    "askPrice": "4.00000200",
-    "askQty": "9.00000000"
-  },
-  {
-    "symbol": "ETHUSDT",
-    "bidPrice": "0.07946700",
-    "bidQty": "9.00000000",
-    "askPrice": "100000.00000000",
-    "askQty": "1000.00000000"
-  }
-]
-```
+
 
 ## Account endpoints
 ### New order  (TRADE)
@@ -1214,7 +1141,7 @@ timestamp | LONG | YES |
         "icebergQty": "0.017083"
       },
       {
-        "symbol": "BTCUSDT",
+        "symbol": 'BTCUSDT',
         "origClientOrderId": "461cPg51vQjV3zIMOXNz39",
         "orderId": 21,
         "orderListId": 1929,
@@ -1257,24 +1184,15 @@ timestamp | LONG | YES |
 ```javascript
 [
   {
-    "symbol": "LTCBTC",
-    "orderId": 1,
-    "orderListId": -1, //Unless OCO, the value will always be -1
-    "clientOrderId": "myOrder1",
-    "price": "0.1",
-    "origQty": "1.0",
-    "executedQty": "0.0",
-    "cummulativeQuoteQty": "0.0",
-    "status": "NEW",
-    "timeInForce": "GTC",
-    "type": "LIMIT",
-    "side": "BUY",
-    "stopPrice": "0.0",
-    "icebergQty": "0.0",
-    "time": 1499827319559,
-    "updateTime": 1499827319559,
-    "isWorking": true,
-    "origQuoteOrderQty": "0.000000"
+    symbol: 'USDTBTK',
+    orderId: 3453,
+    price: 0.0003,
+    origQty: 4984.38,
+    executedQty: 0,
+    status: 'NEW',
+    type: 'LIMIT',
+    side: 'SELL',
+    time: 1599558116000
   }
 ]
 ```
@@ -1693,29 +1611,22 @@ timestamp | LONG | YES |
 **Response:**
 ```javascript
 {
-  "makerCommission": 15,
-  "takerCommission": 15,
-  "buyerCommission": 0,
-  "sellerCommission": 0,
-  "canTrade": true,
-  "canWithdraw": true,
-  "canDeposit": true,
-  "updateTime": 123456789,
-  "accountType": "SPOT",
-  "balances": [
-    {
-      "asset": "BTC",
-      "free": "4723846.89208129",
-      "locked": "0.00000000"
-    },
-    {
-      "asset": "LTC",
-      "free": "4763368.68006011",
-      "locked": "0.00000000"
-    }
+  canTrade: true,
+  canWithdraw: true,
+  canDeposit: true,
+  updateTime: 1599562080318,
+  balances: [
+    { asset: 'XAMP', free: 0, locked: 0 },
+    { asset: 'XRP', free: 0, locked: 0 },
+    { asset: 'LTC', free: 0, locked: 0 },
+    { asset: 'USDT', free: 0.007990005606998807, locked: 0 },
+    { asset: 'BTK', free: 4984.380581900001, locked: 0 },
+    { asset: 'TRX', free: 0, locked: 0 },
+    { asset: 'ETH', free: 0.03109684499999997, locked: 0 },
+    { asset: 'BTC', free: 0, locked: 0 }
   ],
-    "permissions": [
-    "SPOT"
+  makerCommission: null,
+  takerCommission: null
   ]
 }
 ```
@@ -1749,19 +1660,16 @@ Otherwise most recent orders are returned.
 ```javascript
 [
   {
-    "symbol": "BNBBTC",
-    "id": 28457,
-    "orderId": 100234,
-    "orderListId": -1,
-    "price": "4.00000100",
-    "qty": "12.00000000",
-    "quoteQty": "48.000012",
-    "commission": "10.10000000",
-    "commissionAsset": "BNB",
-    "time": 1499865549590,
-    "isBuyer": true,
-    "isMaker": false,
-    "isBestMatch": true
+    symbol: 'USDTBTK',
+    id: 22,
+    orderId: 124,
+    price: 0.00029,
+    qty: 4984.3805819,
+    commission: 0,
+    commissionAsset: 'USDT',
+    time: 1599493279836,
+    isBuyer: 'Y',
+    isMaker: 'Y'
   }
 ]
 ```
