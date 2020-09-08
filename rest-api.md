@@ -43,11 +43,6 @@
     - [Cancel All Open Orders on a Symbol (TRADE)](#cancel-all-open-orders-on-a-symbol-trade)
     - [Current open orders (USER_DATA)](#current-open-orders-user_data)
     - [All orders (USER_DATA)](#all-orders-user_data)
-    - [New OCO (TRADE)](#new-oco-trade)
-    - [Cancel OCO (TRADE)](#cancel-oco-trade)
-    - [Query OCO (USER_DATA)](#query-oco-user_data)
-    - [Query all OCO (USER_DATA)](#query-all-oco-user_data)
-    - [Query Open OCO (USER_DATA)](#query-open-oco-user_data)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
   - [User data stream endpoints](#user-data-stream-endpoints)
@@ -310,24 +305,6 @@ Status | Description
 `REJECTED`       | The order was not accepted by the engine and not processed.
 `EXPIRED` | The order was canceled according to the order type's rules (e.g. LIMIT FOK orders with no fill, LIMIT IOC or MARKET orders that partially fill) <br> or by the exchange, (e.g. orders canceled during liquidation, orders canceled during maintenance)
 
-**OCO Status (listStatusType):**
-
-Status | Description
------------| --------------
-`RESPONSE` | This is used when the ListStatus is responding to a failed action. (E.g. Orderlist placement or cancellation)
-`EXEC_STARTED`| The order list has been placed or there is an update to the order list status.
-`ALL_DONE` | The order list has finished executing and thus no longer active.
-
-**OCO Order Status (listOrderStatus):**
-
-Status | Description
------------| --------------
-`EXECUTING` | Either an order list has been placed or there is an update to the status of the list.
-`ALL_DONE`| An order list has completed execution and thus no longer active. 
-`REJECT` | The List Status is responding to a failed action either during order placement or order canceled
-
-**ContingencyType**
-* OCO
 
 **Order types (orderTypes, type):**
 
@@ -869,7 +846,7 @@ Trigger order price rules against market price for both MARKET and LIMIT version
 {
   "symbol": "ETHUSDT",
   "orderId": 28,
-  "orderListId": -1, //Unless OCO, value will be -1
+  "orderListId": -1, 
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595
 }
@@ -880,7 +857,7 @@ Trigger order price rules against market price for both MARKET and LIMIT version
 {
   "symbol": "BTKUSDT",
   "orderId": 28,
-  "orderListId": -1, //Unless OCO, value will be -1
+  "orderListId": -1, 
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595,
   "price": "0.00000000",
@@ -899,7 +876,7 @@ Trigger order price rules against market price for both MARKET and LIMIT version
 {
   "symbol": "BTCUSDT",
   "orderId": 28,
-  "orderListId": -1, //Unless OCO, value will be -1
+  "orderListId": -1,
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
   "transactTime": 1507725176595,
   "price": "0.00000000",
@@ -994,7 +971,7 @@ Notes:
 {
   "symbol": "LTCBTC",
   "orderId": 1,
-  "orderListId": -1 //Unless part of an OCO, the value will always be -1.
+  "orderListId": -1
   "clientOrderId": "myOrder1",
   "price": "0.1",
   "origQty": "1.0",
@@ -1041,7 +1018,7 @@ Either `orderId` or `origClientOrderId` must be sent.
   "symbol": "LTCBTC",
   "origClientOrderId": "myOrder1",
   "orderId": 4,
-  "orderListId": -1, //Unless part of an OCO, the value will always be -1.
+  "orderListId": -1,
   "clientOrderId": "cancelMyOrder1",
   "price": "2.00000000",
   "origQty": "1.00000000",
@@ -1059,7 +1036,6 @@ Either `orderId` or `origClientOrderId` must be sent.
 DELETE /api/v3/openOrders (HMAC SHA256)
 ```
 Cancels all active orders on a symbol.
-This includes OCO orders.
 
 **Weight**
 1
@@ -1229,7 +1205,7 @@ timestamp | LONG | YES |
   {
     "symbol": "LTCBTC",
     "orderId": 1,
-    "orderListId": -1, //Unless OCO, the value will always be -1
+    "orderListId": -1,
     "clientOrderId": "myOrder1",
     "price": "0.1",
     "origQty": "1.0",
@@ -1249,349 +1225,6 @@ timestamp | LONG | YES |
 ]
 ```
 
-### New OCO (TRADE)
-
-```
-POST /api/v3/order/oco (HMAC SHA256)
-```
-
-**Weight**: 1
-
-Send in a new OCO
-
-**Parameters**:
-
-Name |Type| Mandatory | Description
------|-----|----------| -----------
-symbol|STRING| YES|
-listClientOrderId|STRING|NO| A unique Id for the entire orderList
-side|ENUM|YES|
-quantity|DECIMAL|YES|
-limitClientOrderId|STRING|NO| A unique Id for the limit order
-price|DECIMAL|YES|
-limitIcebergQty|DECIMAL|NO| Used to make the `LIMIT_MAKER` leg an iceberg order.
-stopClientOrderId |STRING|NO| A unique Id for the stop loss/stop loss limit leg
-stopPrice |DECIMAL| YES
-stopLimitPrice|DECIMAL|NO | If provided, `stopLimitTimeInForce` is required.
-stopIcebergQty|DECIMAL|NO| Used with `STOP_LOSS_LIMIT` leg to make an iceberg order.
-stopLimitTimeInForce|ENUM|NO| Valid values are `GTC`/`FOK`/`IOC`
-newOrderRespType|ENUM|NO| Set the response JSON.
-recvWindow|LONG|NO| The value cannot be greater than `60000`
-timestamp|LONG|YES|
-
-
-Additional Info:
-* Price Restrictions:
-    * `SELL`: Limit Price > Last Price > Stop Price
-    * `BUY`: Limit Price < Last Price < Stop Price
-* Quantity Restrictions:
-    * Both legs must have the same quantity.
-    * ```ICEBERG``` quantities however do not have to be the same
-* Order Rate Limit
-    * `OCO` counts as 2 orders against the order rate limit. 
-
-**Response:**
-
-```json
-{
-  "orderListId": 0,
-  "contingencyType": "OCO",
-  "listStatusType": "EXEC_STARTED",
-  "listOrderStatus": "EXECUTING",
-  "listClientOrderId": "JYVpp3F0f5CAG15DhtrqLp",
-  "transactionTime": 1563417480525,
-  "symbol": "LTCBTC",
-  "orders": [
-    {
-      "symbol": "LTCBTC",
-      "orderId": 2,
-      "clientOrderId": "Kk7sqHb9J6mJWTMDVW7Vos"
-    },
-    {
-      "symbol": "LTCBTC",
-      "orderId": 3,
-      "clientOrderId": "xTXKaGYd4bluPVp78IVRvl"
-    }
-  ],
-  "orderReports": [
-    {
-      "symbol": "LTCBTC",
-      "orderId": 2,
-      "orderListId": 0,
-      "clientOrderId": "Kk7sqHb9J6mJWTMDVW7Vos",
-      "transactTime": 1563417480525,
-      "price": "0.000000",
-      "origQty": "0.624363",
-      "executedQty": "0.000000",
-      "cummulativeQuoteQty": "0.000000",
-      "status": "NEW",
-      "timeInForce": "GTC",
-      "type": "STOP_LOSS",
-      "side": "BUY",
-      "stopPrice": "0.960664"
-    },
-    {
-      "symbol": "LTCBTC",
-      "orderId": 3,
-      "orderListId": 0,
-      "clientOrderId": "xTXKaGYd4bluPVp78IVRvl",
-      "transactTime": 1563417480525,
-      "price": "0.036435",
-      "origQty": "0.624363",
-      "executedQty": "0.000000",
-      "cummulativeQuoteQty": "0.000000",
-      "status": "NEW",
-      "timeInForce": "GTC",
-      "type": "LIMIT_MAKER",
-      "side": "BUY"
-    }
-  ]
-}
-```
-
-
-### Cancel OCO (TRADE)
-
-```
-DELETE /api/v3/orderList (HMAC SHA256)
-```
-
-**Weight**: 1
-
-Cancel an entire Order List
-
-**Parameters:**
-
-Name| Type| Mandatory| Description
-----| ----|------|------
-symbol|STRING| YES|
-orderListId|LONG|NO| Either ```orderListId``` or ```listClientOrderId``` must be provided
-listClientOrderId|STRING|NO| Either ```orderListId``` or ```listClientOrderId``` must be provided
-newClientOrderId|STRING|NO| Used to uniquely identify this cancel. Automatically generated by default
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
-timestamp|LONG|YES|
-
-Additional notes:
-* Canceling an individual leg will cancel the entire OCO
-
-**Response**
-
-```javascript
-{
-  "orderListId": 0,
-  "contingencyType": "OCO",
-  "listStatusType": "ALL_DONE",
-  "listOrderStatus": "ALL_DONE",
-  "listClientOrderId": "C3wyj4WVEktd7u9aVBRXcN",
-  "transactionTime": 1574040868128,
-  "symbol": "LTCBTC",
-  "orders": [
-    {
-      "symbol": "LTCBTC",
-      "orderId": 2,
-      "clientOrderId": "pO9ufTiFGg3nw2fOdgeOXa"
-    },
-    {
-      "symbol": "LTCBTC",
-      "orderId": 3,
-      "clientOrderId": "TXOvglzXuaubXAaENpaRCB"
-    }
-  ],
-  "orderReports": [
-    {
-      "symbol": "LTCBTC",
-      "origClientOrderId": "pO9ufTiFGg3nw2fOdgeOXa",
-      "orderId": 2,
-      "orderListId": 0,
-      "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
-      "price": "1.00000000",
-      "origQty": "10.00000000",
-      "executedQty": "0.00000000",
-      "cummulativeQuoteQty": "0.00000000",
-      "status": "CANCELED",
-      "timeInForce": "GTC",
-      "type": "STOP_LOSS_LIMIT",
-      "side": "SELL",
-      "stopPrice": "1.00000000"
-    },
-    {
-      "symbol": "LTCBTC",
-      "origClientOrderId": "TXOvglzXuaubXAaENpaRCB",
-      "orderId": 3,
-      "orderListId": 0,
-      "clientOrderId": "unfWT8ig8i0uj6lPuYLez6",
-      "price": "3.00000000",
-      "origQty": "10.00000000",
-      "executedQty": "0.00000000",
-      "cummulativeQuoteQty": "0.00000000",
-      "status": "CANCELED",
-      "timeInForce": "GTC",
-      "type": "LIMIT_MAKER",
-      "side": "SELL"
-    }
-  ]
-}
-```
-
-
-### Query OCO (USER_DATA)
-
-```
-GET /api/v3/orderList (HMAC SHA256)
-```
-
-**Weight**: 1
-
-Retrieves a specific OCO based on provided optional parameters
-
-**Parameters**:
-
-Name| Type|Mandatory| Description
-----|-----|----|----------
-orderListId|LONG|NO|  Either ```orderListId``` or ```listClientOrderId``` must be provided
-origClientOrderId|STRING|NO| Either ```orderListId``` or ```listClientOrderId``` must be provided
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
-timestamp|LONG|YES|
-
-**Response:**
-
-```javascript
-{
-  "orderListId": 27,
-  "contingencyType": "OCO",
-  "listStatusType": "EXEC_STARTED",
-  "listOrderStatus": "EXECUTING",
-  "listClientOrderId": "h2USkA5YQpaXHPIrkd96xE",
-  "transactionTime": 1565245656253,
-  "symbol": "LTCBTC",
-  "orders": [
-    {
-      "symbol": "LTCBTC",
-      "orderId": 4,
-      "clientOrderId": "qD1gy3kc3Gx0rihm9Y3xwS"
-    },
-    {
-      "symbol": "LTCBTC",
-      "orderId": 5,
-      "clientOrderId": "ARzZ9I00CPM8i3NhmU9Ega"
-    }
-  ]
-}
-```
-
-
-### Query all OCO (USER_DATA)
-
-```
-GET /api/v3/allOrderList (HMAC SHA256)
-```
-
-**Weight**: 10
-
-Retrieves all OCO based on provided optional parameters
-
-**Parameters**
-
-Name|Type| Mandatory| Description
-----|----|----|---------
-fromId|LONG|NO| If supplied, neither ```startTime``` or ```endTime``` can be provided
-startTime|LONG|NO|
-endTime|LONG|NO|
-limit|INT|NO| Default Value: 500; Max Value: 1000
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
-timestamp|LONG|YES|
-
-**Response:**
-
-```javascript
-[
-  {
-    "orderListId": 29,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "amEEAXryFzFwYF1FeRpUoZ",
-    "transactionTime": 1565245913483,
-    "symbol": "LTCBTC",
-    "orders": [
-      {
-        "symbol": "LTCBTC",
-        "orderId": 4,
-        "clientOrderId": "oD7aesZqjEGlZrbtRpy5zB"
-      },
-      {
-        "symbol": "LTCBTC",
-        "orderId": 5,
-        "clientOrderId": "Jr1h6xirOxgeJOUuYQS7V3"
-      }
-    ]
-  },
-  {
-    "orderListId": 28,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "hG7hFNxJV6cZy3Ze4AUT4d",
-    "transactionTime": 1565245913407,
-    "symbol": "LTCBTC",
-    "orders": [
-      {
-        "symbol": "LTCBTC",
-        "orderId": 2,
-        "clientOrderId": "j6lFOfbmFMRjTYA7rRJ0LP"
-      },
-      {
-        "symbol": "LTCBTC",
-        "orderId": 3,
-        "clientOrderId": "z0KCjOdditiLS5ekAFtK81"
-      }
-    ]
-  }
-]
-```
-
-### Query Open OCO (USER_DATA)
-
-```
-GET /api/v3/openOrderList (HMAC SHA256)
-```
-
-Weight: 2
-
-**Parameters**
-
-Name| Type|Mandatory| Description
-----|-----|---|------------------
-recvWindow|LONG|NO| The value cannot be greater than ```60000```
-timestamp|LONG|YES|
-
-**Response:**
-
-```javascript
-[
-  {
-    "orderListId": 31,
-    "contingencyType": "OCO",
-    "listStatusType": "EXEC_STARTED",
-    "listOrderStatus": "EXECUTING",
-    "listClientOrderId": "wuB13fmulKj3YjdqWEcsnp",
-    "transactionTime": 1565246080644,
-    "symbol": "1565246079109",
-    "orders": [
-      {
-        "symbol": "LTCBTC",
-        "orderId": 4,
-        "clientOrderId": "r3EH2N76dHfLoSZWIUw1bT"
-      },
-      {
-        "symbol": "LTCBTC",
-        "orderId": 5,
-        "clientOrderId": "Cv1SnyPD3qhqpbjpYEHbd2"
-      }
-    ]
-  }
-]
-```
 
 ### Account information (USER_DATA)
 ```
