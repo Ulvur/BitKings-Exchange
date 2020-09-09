@@ -167,11 +167,11 @@ recvWindow | 5000
 timestamp | 1499827319559
 
 ### Example 1: As a request body
-* **requestBody:** symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
+* **requestBody:** symbol=USDTBTK&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
 
     ```
-    [linux]$ echo -n "symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
+    [linux]$ echo -n "symbol=USDTBTK&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
     (stdin)= c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71
     ```
 
@@ -180,15 +180,15 @@ timestamp | 1499827319559
 
     ```
     (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order' -d 'symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
+    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order' -d 'symbol=USDTBTK&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
     ```
 
 ### Example 2: As a query string
-* **queryString:** symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
+* **queryString:** symbol=USDTBTK&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
 
     ```
-    [linux]$ echo -n "symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
+    [linux]$ echo -n "symbol=USTKBTK&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
     (stdin)= c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71
     ```
 
@@ -197,16 +197,16 @@ timestamp | 1499827319559
 
     ```
     (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order?symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
+    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order?symbol=USTKBTK&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
     ```
 
 ### Example 3: Mixed query string and request body
-* **queryString:** symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC
+* **queryString:** symbol=USDTBTK&side=BUY&type=LIMIT&timeInForce=GTC
 * **requestBody:** quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559
 * **HMAC SHA256 signature:**
 
     ```
-    [linux]$ echo -n "symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTCquantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
+    [linux]$ echo -n "symbol=USDTBTK&side=BUY&type=LIMIT&timeInForce=GTCquantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
     (stdin)= 0fd168b8ddb4876a0358a8d14d0c9f3da0e9b20c5d52b2a00fcf7d1c602f9a77
     ```
 
@@ -215,7 +215,7 @@ timestamp | 1499827319559
 
     ```
     (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order?symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC' -d 'quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=0fd168b8ddb4876a0358a8d14d0c9f3da0e9b20c5d52b2a00fcf7d1c602f9a77'
+    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order?symbol=USDTBTK&side=BUY&type=LIMIT&timeInForce=GTC' -d 'quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=0fd168b8ddb4876a0358a8d14d0c9f3da0e9b20c5d52b2a00fcf7d1c602f9a77'
     ```
 
 Note that the signature is different in example 3.
@@ -226,8 +226,8 @@ There is no & between "GTC" and "quantity=1".
 
 These terms will be used throughout the documentation, so it is recommended especially for new users to read to help their understanding of the API.
 
-* `base asset` refers to the asset that is the `quantity` of a symbol. For the symbol BTKUSDT, BTK would be the `base asset`.
-* `quote asset` refers to the asset that is the `price` of a symbol. For the symbol BTKUSDT, USDT would be the `quote asset`.
+* `base asset` refers to the asset that is the `quantity` of a symbol. For the symbol USDTBTK, BTK would be the `base asset`.
+* `quote asset` refers to the asset that is the `price` of a symbol. For the symbol USDTKBTK, USDT would be the `quote asset`.
 
 
 ## ENUM definitions
@@ -730,7 +730,7 @@ symbol | STRING | NO |
 **Response:**
 ```javascript
 {
-    symbol: 'BTKUSDT',
+    symbol: 'USDTKBTK',
     bidPrice: 0.000299,
     bidQty: 15000,
     askPrice: 0.0003,
@@ -789,7 +789,7 @@ Trigger order price rules against market price for both MARKET and LIMIT version
 **Response ACK:**
 ```javascript
 {
-  "symbol": "ETHUSDT",
+  "symbol": "USDTETH",
   "orderId": 28,
   "orderListId": -1, 
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
@@ -800,7 +800,7 @@ Trigger order price rules against market price for both MARKET and LIMIT version
 **Response RESULT:**
 ```javascript
 {
-  "symbol": "BTKUSDT",
+  "symbol": "USDTBTK",
   "orderId": 28,
   "orderListId": -1, 
   "clientOrderId": "6gCrw2kRUAF9CvJDGP16IP",
