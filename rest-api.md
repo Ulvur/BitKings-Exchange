@@ -75,8 +75,8 @@
 Sample Payload below:
 ```javascript
 {
-  "code": -1121,
-  "msg": "Invalid symbol."
+  code: -1002,
+  msg: 'Unauthorized request - signature is incorrect'
 }
 ```
 * Specific error codes and messages are defined in [Errors Codes](./errors.md).
@@ -200,7 +200,7 @@ timestamp | 1499827319559
 * **HMAC SHA256 signature:**
 
     ```
-    [linux]$ echo -n "symbol=BTKUSDTC&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
+    [linux]$ echo -n "symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
     (stdin)= c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71
     ```
 
@@ -209,7 +209,7 @@ timestamp | 1499827319559
 
     ```
     (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v3/order' -d 'symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
+    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order' -d 'symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
     ```
 
 ### Example 2: As a query string
@@ -226,7 +226,7 @@ timestamp | 1499827319559
 
     ```
     (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v3/order?symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
+    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order?symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC&quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71'
     ```
 
 ### Example 3: Mixed query string and request body
@@ -244,7 +244,7 @@ timestamp | 1499827319559
 
     ```
     (HMAC SHA256)
-    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v3/order?symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC' -d 'quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=0fd168b8ddb4876a0358a8d14d0c9f3da0e9b20c5d52b2a00fcf7d1c602f9a77'
+    [linux]$ curl -H "X-MBX-APIKEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A" -X POST 'https://api.bitkings.com/api/v1/order?symbol=BTKUSDT&side=BUY&type=LIMIT&timeInForce=GTC' -d 'quantity=1&price=0.1&recvWindow=5000&timestamp=1499827319559&signature=0fd168b8ddb4876a0358a8d14d0c9f3da0e9b20c5d52b2a00fcf7d1c602f9a77'
     ```
 
 Note that the signature is different in example 3.
@@ -412,7 +412,7 @@ NONE
 **Response:**
 ```javascript
 {
-  "serverTime": 1499827319559
+  serverTime: 1599657467533
 }
 ```
 
@@ -430,50 +430,47 @@ NONE
 
 **Response:**
 ```javascript
-{
-  "timezone": "UTC",
-  "serverTime": 1565246363776,
-  "rateLimits": [
+200 {
+  timezone: 'UTC',
+  serverTime: 1599657344565,
+  rateLimits: [],
+  exchangeFilters: [],
+  symbols: [
     {
-      //These are defined in the `ENUM definitions` section under `Rate Limiters (rateLimitType)`.
-      //All limits are optional
-    }
-  ],
-  "exchangeFilters": [
-    //These are the defined filters in the `Filters` section.
-    //All filters are optional.
-  ],
-  "symbols": [
+      symbol: 'USDTETH',
+      status: 'TRADING',
+      baseAsset: 'ETH',
+      baseAssetPrecision: 8,
+      quoteAsset: 'USDT',
+      quotePrecision: 8,
+      baseCommissionPrecision: 8,
+      quoteCommissionPrecision: 8,
+      orderTypes: [Array],
+      filters: []
+    },
     {
-      "symbol": "BTKUSDT",
-      "status": "TRADING",
-      "baseAsset": "BTK",
-      "baseAssetPrecision": 8,
-      "quoteAsset": "USDT",
-      "quotePrecision": 8,
-      "baseCommissionPrecision": 8,
-      "quoteCommissionPrecision": 8,
-      "orderTypes": [
-        "LIMIT",
-        "LIMIT_MAKER",
-        "MARKET",
-        "STOP_LOSS",
-        "STOP_LOSS_LIMIT",
-        "TAKE_PROFIT",
-        "TAKE_PROFIT_LIMIT"
-      ],
-      "ocoAllowed": true,
-      "quoteOrderQtyMarketAllowed": true,
-      "isSpotTradingAllowed": true,
-      "isMarginTradingAllowed": true,
-      "filters": [
-        //These are defined in the Filters section.
-        //All filters are optional
-      ],
-      "permissions": [
-        "SPOT",
-        "MARGIN"
-      ]
+      symbol: 'USDTBTK',
+      status: 'TRADING',
+      baseAsset: 'BTK',
+      baseAssetPrecision: 8,
+      quoteAsset: 'USDT',
+      quotePrecision: 8,
+      baseCommissionPrecision: 8,
+      quoteCommissionPrecision: 8,
+      orderTypes: [Array],
+      filters: []
+    },
+    {
+      symbol: 'USDTXAMP',
+      status: 'TRADING',
+      baseAsset: 'XAMP',
+      baseAssetPrecision: 8,
+      quoteAsset: 'USDT',
+      quotePrecision: 8,
+      baseCommissionPrecision: 8,
+      quoteCommissionPrecision: 8,
+      orderTypes: [Array],
+      filters: []
     }
   ]
 }
