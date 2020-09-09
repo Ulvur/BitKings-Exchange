@@ -55,11 +55,9 @@
     - [PERCENT_PRICE](#percent_price)
     - [LOT_SIZE](#lot_size)
     - [MIN_NOTIONAL](#min_notional)
-    - [ICEBERG_PARTS](#iceberg_parts)
     - [MARKET_LOT_SIZE](#market_lot_size)
     - [MAX_NUM_ORDERS](#max_num_orders)
     - [MAX_NUM_ALGO_ORDERS](#max_num_algo_orders)
-    - [MAX_NUM_ICEBERG_ORDERS](#max_num_iceberg_orders)
     - [MAX_POSITION FILTER](#max_position-filter)
   - [Exchange Filters](#exchange-filters)
     - [EXCHANGE_MAX_NUM_ORDERS](#exchange_max_num_orders)
@@ -481,7 +479,6 @@ NONE
         "TAKE_PROFIT",
         "TAKE_PROFIT_LIMIT"
       ],
-      "icebergAllowed": true,
       "ocoAllowed": true,
       "quoteOrderQtyMarketAllowed": true,
       "isSpotTradingAllowed": true,
@@ -814,7 +811,6 @@ quoteOrderQty|DECIMAL|NO|
 price | DECIMAL | NO |
 newClientOrderId | STRING | NO | A unique id among open orders. Automatically generated if not sent.<br> Orders with the same `newClientOrderID` can be accepted only when the previous one is filled, otherwise the order will be rejected.
 stopPrice | DECIMAL | NO | Used with `STOP_LOSS`, `STOP_LOSS_LIMIT`, `TAKE_PROFIT`, and `TAKE_PROFIT_LIMIT` orders.
-icebergQty | DECIMAL | NO | Used with `LIMIT`, `STOP_LOSS_LIMIT`, and `TAKE_PROFIT_LIMIT` to create an iceberg order.
 newOrderRespType | ENUM | NO | Set the response JSON. `ACK`, `RESULT`, or `FULL`; `MARKET` and `LIMIT` order types default to `FULL`, all other orders default to `ACK`.
 recvWindow | LONG | NO |The value cannot be greater than ```60000```
 timestamp | LONG | YES |
@@ -833,8 +829,6 @@ Type | Additional mandatory parameters | Additional Information
 
 Other info:
 
-* Any `LIMIT` or `LIMIT_MAKER` type order can be made an iceberg order by sending an `icebergQty`.
-* Any order with an `icebergQty` MUST have `timeInForce` set to `GTC`.
 * `MARKET` orders using `quoteOrderQty` will not break `LOT_SIZE` filter rules; the order will execute a `quantity` that will have the notional value as close as possible to `quoteOrderQty`.
 Trigger order price rules against market price for both MARKET and LIMIT versions:
 
@@ -982,7 +976,6 @@ Notes:
   "type": "LIMIT",
   "side": "BUY",
   "stopPrice": "0.0",
-  "icebergQty": "0.0",
   "time": 1499827319559,
   "updateTime": 1499827319559,
   "isWorking": true,
@@ -1115,7 +1108,6 @@ timestamp | LONG | YES |
         "type": "STOP_LOSS_LIMIT",
         "side": "BUY",
         "stopPrice": "0.378131",
-        "icebergQty": "0.017083"
       },
       {
         "symbol": 'BTCUSDT',
@@ -1131,7 +1123,6 @@ timestamp | LONG | YES |
         "timeInForce": "GTC",
         "type": "LIMIT_MAKER",
         "side": "BUY",
-        "icebergQty": "0.639962"
       }
     ]
   }
@@ -1216,7 +1207,6 @@ timestamp | LONG | YES |
     "type": "LIMIT",
     "side": "BUY",
     "stopPrice": "0.0",
-    "icebergQty": "0.0",
     "time": 1499827319559,
     "updateTime": 1499827319559,
     "isWorking": true,
@@ -1418,11 +1408,11 @@ In order to pass the `percent price`, the following must be true for `price`:
 ### LOT_SIZE
 The `LOT_SIZE` filter defines the `quantity` (aka "lots" in auction terms) rules for a symbol. There are 3 parts:
 
-* `minQty` defines the minimum `quantity`/`icebergQty` allowed.
-* `maxQty` defines the maximum `quantity`/`icebergQty` allowed.
-* `stepSize` defines the intervals that a `quantity`/`icebergQty` can be increased/decreased by.
+* `minQty` defines the minimum `quantity` allowed.
+* `maxQty` defines the maximum `quantity'
+* `stepSize` defines the intervals that a `quantity` can be increased/decreased by.
 
-In order to pass the `lot size`, the following must be true for `quantity`/`icebergQty`:
+In order to pass the `lot size`, the following must be true for `quantity`:
 
 * `quantity` >= `minQty`
 * `quantity` <= `maxQty`
@@ -1456,16 +1446,6 @@ Since `MARKET` orders have no price, the average price is used over the last `av
 }
 ```
 
-### ICEBERG_PARTS
-The `ICEBERG_PARTS` filter defines the maximum parts an iceberg order can have. The number of `ICEBERG_PARTS` is defined as `CEIL(qty / icebergQty)`.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "ICEBERG_PARTS",
-  "limit": 10
-}
-```
 
 ### MARKET_LOT_SIZE
 The `MARKET_LOT_SIZE` filter defines the `quantity` (aka "lots" in auction terms) rules for `MARKET` orders on a symbol. There are 3 parts:
@@ -1511,18 +1491,6 @@ The `MAX_NUM_ALGO_ORDERS` filter defines the maximum number of "algo" orders an 
 {
   "filterType": "MAX_NUM_ALGO_ORDERS",
   "maxNumAlgoOrders": 5
-}
-```
-
-### MAX_NUM_ICEBERG_ORDERS
-The `MAX_NUM_ICEBERG_ORDERS` filter defines the maximum number of `ICEBERG` orders an account is allowed to have open on a symbol.
-An `ICEBERG` order is any order where the `icebergQty` is > 0.
-
-**/exchangeInfo format:**
-```javascript
-{
-  "filterType": "MAX_NUM_ICEBERG_ORDERS",
-  "maxNumIcebergOrders": 5
 }
 ```
 
