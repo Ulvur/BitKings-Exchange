@@ -157,7 +157,7 @@ secretKey | NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j
 
 Parameter | Value
 ------------ | ------------
-symbol | BTKUSDT
+symbol | USDTBTK
 side | BUY
 type | LIMIT
 timeInForce | GTC
