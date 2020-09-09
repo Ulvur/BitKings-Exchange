@@ -7,10 +7,6 @@
   - [HTTP Return Codes](#http-return-codes)
   - [Error Codes](#error-codes)
   - [General Information on Endpoints](#general-information-on-endpoints)
-- [LIMITS](#limits)
-  - [General Info on Limits](#general-info-on-limits)
-  - [IP Limits](#ip-limits)
-  - [Order Rate Limits](#order-rate-limits)
 - [Endpoint security type](#endpoint-security-type)
 - [SIGNED (TRADE and USER_DATA) Endpoint security](#signed-trade-and-user_data-endpoint-security)
   - [Timing security](#timing-security)
@@ -91,31 +87,6 @@ Sample Payload below:
 * If a parameter sent in both the `query string` and `request body`, the
   `query string` parameter will be used.
 
-# LIMITS
-
-## General Info on Limits
-* The following `intervalLetter` values for headers:
-    * SECOND => S
-    * MINUTE => M
-    * HOUR => H
-    * DAY => D
-* `intervalNum` describes the amount of the interval. For example, `intervalNum` 5 with `intervalLetter` M means "Every 5 minutes".
-* The `/api/v3/exchangeInfo` `rateLimits` array contains objects related to the exchange's `RAW_REQUEST`, `REQUEST_WEIGHT`, and `ORDER` rate limits. These are further defined in the `ENUM definitions` section under `Rate limiters (rateLimitType)`.
-* A 429 will be returned when either rate limit is violated.
-
-## IP Limits
-* Every request will contain `X-MBX-USED-WEIGHT-(intervalNum)(intervalLetter)` in the response headers which has the current used weight for the IP for all request rate limiters defined.
-* Each route has a `weight` which determines for the number of requests each endpoint counts for. Heavier endpoints and endpoints that do operations on multiple symbols will have a heavier `weight`.
-* When a 429 is received, it's your obligation as an API to back off and not spam the API.
-* **Repeatedly violating rate limits and/or failing to back off after receiving 429s will result in an automated IP ban (HTTP status 418).**
-* IP bans are tracked and **scale in duration** for repeat offenders, **from 2 minutes to 3 days**.
-* A `Retry-After` header is sent with a 418 or 429 responses and will give the **number of seconds** required to wait, in the case of a 429, to prevent a ban, or, in the case of a 418, until the ban is over.
-* **The limits on the API are based on the IPs, not the API keys.**
-
-## Order Rate Limits
-* Every successful order response will contain a `X-MBX-ORDER-COUNT-(intervalNum)(intervalLetter)` header which has the current order count for the account for all order rate limiters defined.
-* Rejected/unsuccessful orders are not guaranteed to have `X-MBX-ORDER-COUNT-**` headers in the response.
-* **The order rate limit is counted against each account**.
 
 # Endpoint security type
 * Each endpoint has a security type that determines the how you will
