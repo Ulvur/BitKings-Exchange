@@ -45,23 +45,6 @@
     - [All orders (USER_DATA)](#all-orders-user_data)
     - [Account information (USER_DATA)](#account-information-user_data)
     - [Account trade list (USER_DATA)](#account-trade-list-user_data)
-  - [User data stream endpoints](#user-data-stream-endpoints)
-    - [Start user data stream (USER_STREAM)](#start-user-data-stream-user_stream)
-    - [Keepalive user data stream (USER_STREAM)](#keepalive-user-data-stream-user_stream)
-    - [Close user data stream (USER_STREAM)](#close-user-data-stream-user_stream)
-- [Filters](#filters)
-  - [Symbol filters](#symbol-filters)
-    - [PRICE_FILTER](#price_filter)
-    - [PERCENT_PRICE](#percent_price)
-    - [LOT_SIZE](#lot_size)
-    - [MIN_NOTIONAL](#min_notional)
-    - [MARKET_LOT_SIZE](#market_lot_size)
-    - [MAX_NUM_ORDERS](#max_num_orders)
-    - [MAX_NUM_ALGO_ORDERS](#max_num_algo_orders)
-    - [MAX_POSITION FILTER](#max_position-filter)
-  - [Exchange Filters](#exchange-filters)
-    - [EXCHANGE_MAX_NUM_ORDERS](#exchange_max_num_orders)
-    - [EXCHANGE_MAX_NUM_ALGO_ORDERS](#exchange_max_num_algo_orders)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
